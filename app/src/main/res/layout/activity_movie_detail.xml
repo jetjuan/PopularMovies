@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.juantorres.popularmovies.MovieDetailActivity">
+
+    <TextView
+        android:id="@+id/tv_original_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="20sp"
+        tools:text="@string/tool_original_title"
+        tools:layout_editor_absoluteY="16dp"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <TextView
+        android:id="@+id/tv_release_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/tool_release_date"
+        tools:layout_editor_absoluteY="90dp"
+        tools:layout_editor_absoluteX="51dp" />
+
+    <TextView
+        android:id="@+id/tv_movie_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/tool_movie_length"
+        tools:layout_editor_absoluteY="73dp"
+        tools:layout_editor_absoluteX="239dp" />
+
+    <TextView
+        android:id="@+id/tv_movie_plot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="@string/tool_plot_synopsis"
+        tools:layout_editor_absoluteY="197dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <ImageView
+        android:id="@+id/movie_poster_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:src="@mipmap/ic_launcher"
+        tools:layout_editor_absoluteY="129dp"
+        tools:layout_editor_absoluteX="277dp" />
+
+</android.support.constraint.ConstraintLayout>
+
+
+<!--TODO: finish this UI-->

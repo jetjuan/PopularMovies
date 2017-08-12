@@ -1,7 +1,8 @@
 package com.juantorres.popularmovies.utils;
 
+import android.support.annotation.NonNull;
+
 import com.juantorres.popularmovies.model.Movie;
-import com.juantorres.popularmovies.model.MoviePoster;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,28 +16,53 @@ import java.util.ArrayList;
 
 public class JSONUtils {
 
-    public static ArrayList<MoviePoster> getMoviePostersFromJSONString(String jsonString) throws JSONException{
-        JSONObject json = new JSONObject(jsonString);
+    public static ArrayList<Movie> getMoviesFromJSONString (@NonNull String jsonString) {
+        ArrayList<Movie> movies = null;
 
-        ArrayList<MoviePoster> moviePosters = new ArrayList<MoviePoster>();
+        try {
+            movies = new ArrayList<>();
+            JSONObject json = new JSONObject(jsonString);
 
-        JSONArray movies = json.getJSONArray("results");
 
-        for(int i = 0; i< movies.length(); i++){
-            JSONObject movie = movies.getJSONObject(i);
+            JSONArray moviesInJSON = json.getJSONArray("results");
 
-            int movieID = movie.getInt("id");
-            String title = movie.getString("title");
-            String posterPath = movie.getString("poster_path");
+            for (int i = 0; i < moviesInJSON.length(); i++) {
+                JSONObject jsonMovie = moviesInJSON.getJSONObject(i);
+                Movie newMovie = new Movie();
 
-            moviePosters.add( new MoviePoster(movieID, title, posterPath));
+                int movieID = jsonMovie.getInt("id");
+                String title = jsonMovie.getString("title");
+                String posterPath = jsonMovie.getString("poster_path");
+                int voteCount = jsonMovie.getInt("vote_count");
+                boolean hasVideo = jsonMovie.getBoolean("video");
+                double voteAverage  = jsonMovie.getDouble("vote_average");
+                double popularity = jsonMovie.getDouble("popularity");
+                String originalLanguage = jsonMovie.getString("original_language");
+                String originalTitle = jsonMovie.getString("original_title");
+                String backdropPath = jsonMovie.getString("backdrop_path");
+
+
+                newMovie.setId(movieID);
+                newMovie.setTitle(title);
+                newMovie.setPosterPath(posterPath);
+                newMovie.setVoteCount(voteCount);
+                newMovie.setHasVideo(hasVideo);
+                newMovie.setVoteAverage(voteAverage);
+                newMovie.setPopularity(popularity);
+                newMovie.setOriginalLanguage(originalLanguage);
+                newMovie.setOriginalTitle(originalTitle);
+                newMovie.setBackDropPath(backdropPath);
+
+
+
+                movies.add(newMovie);
+
+            }
+
+        }catch (JSONException e){
 
         }
 
-        return moviePosters;
-    }
-
-    public static Movie getMovieFromJSONString (String jsonString) {
-        throw new UnsupportedOperationException();
+        return movies;
     }
 }

@@ -12,9 +12,13 @@ import okhttp3.Response;
 
 public class NetworkUtils {
     final static String BASE_URL = "http://api.themoviedb.org/3";
+    final static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/";
 
     final static String API_KEY = ""; //TODO: Get your own APY KEY here: https://www.themoviedb.org/faq/api
+
+
     final static String API_KEY_PARAM = "?api_key=" + API_KEY;
+    final static String POSTER_SIZE_PARAM = "w185";
 
     final static String POPULAR_MOVIES_ENDPOINT = "/movie/popular";
     final static String TOP_RATED_ENDPOINT = "/movie/top_rated";
@@ -50,6 +54,11 @@ public class NetworkUtils {
             return null;
         }
     }
+
+    public static String getPosterUrl(String posterPath){
+        return POSTER_BASE_URL + POSTER_SIZE_PARAM + posterPath;
+    }
+
 
 }
 

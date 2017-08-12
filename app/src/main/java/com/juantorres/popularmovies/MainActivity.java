@@ -41,26 +41,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.tv_test) public void test(){
-        MoviesLoaderTask loader = new MoviesLoaderTask();
-        String json = null;
-        try {
-            json = loader.execute().get();
-        }catch (ExecutionException e){
-            e.printStackTrace();
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-//        textViewTest.setText(json);
-        //TODO complete the above
-        try {
-            textViewTest.setText(JSONUtils.getMoviePostersFromJSONString(json).get(0).getPosterPath());
-
-        }catch (Exception e){
-
-        }
+//        MoviesLoaderTask loader = new MoviesLoaderTask(this);
+//        String json = null;
+//        try {
+//            json = loader.execute().get();
+//        }catch (ExecutionException e){
+//            e.printStackTrace();
+//        }catch (InterruptedException e){
+//            e.printStackTrace();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
+////        textViewTest.setText(json);
+//        //TODO complete the above
+//        try {
+//            textViewTest.setText(JSONUtils.getMoviesFromJSONString(json).get(0).getPosterPath());
+//
+//        }catch (Exception e){
+//
+//        }
 
     }
 

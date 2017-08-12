@@ -1,14 +1,18 @@
 <resources>
     <string name="app_name">PopularMovies</string>
-    
+
     //Tools
     <string name="tool_original_title">Chappie</string>
     <string name="tool_movie_poster_image"></string>
-    <string name="tool_plot_synopsis">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id tincidunt lorem. Mauris vulputate viverra nisl, convallis venenatis ex imperdiet sit amet. Aliquam erat volutpat. Sed sed elit sit amet sem viverra consectetur eu ut ipsum. Pellentesque molestie semper eros, at luctus nisi auctor feugiat. Suspendisse auctor sagittis velit eget euismod. Proin porta urna in imperdiet malesuada. Aenean ac commodo eros. Sed vel lacus et nisi semper auctor vel non erat. Pellentesque ac posuere eros. In sit amet sem mauris. </string>
+    <string name="tool_plot_synopsis">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus movieID tincidunt lorem. Mauris vulputate viverra nisl, convallis venenatis ex imperdiet sit amet. Aliquam erat volutpat. Sed sed elit sit amet sem viverra consectetur eu ut ipsum. Pellentesque molestie semper eros, at luctus nisi auctor feugiat. Suspendisse auctor sagittis velit eget euismod. Proin porta urna in imperdiet malesuada. Aenean ac commodo eros. Sed vel lacus et nisi semper auctor vel non erat. Pellentesque ac posuere eros. In sit amet sem mauris. </string>
     <string name="tool_user_rating">3.5</string>
     <string name="tool_release_date">05/25/1999</string>
     <string name="tool_movie_length">120min</string>
 
     //Labels
     <string name="label_lol"></string>
+    <string name="title_movie_list">Movies</string>
+    <string name="title_movie_detail">Movie Detail</string>
+    <string name="try_again_label">Try Again</string>
+    <string name="network_error_message">Unable to load movies. Please check your network connection :\'(</string>
 </resources>

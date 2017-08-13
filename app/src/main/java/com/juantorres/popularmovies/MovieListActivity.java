@@ -147,6 +147,7 @@ public class MovieListActivity extends AppCompatActivity {
             Picasso.with(holder.mView.getContext()).load(posterURL).into(holder.mPosterImageView);
 
 
+
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -189,5 +190,6 @@ public class MovieListActivity extends AppCompatActivity {
 //                return super.toString() + " '" + mContentView.getText() + "'";
 //            }
         }
+
     }
 }

@@ -14,5 +14,10 @@
     <string name="title_movie_list">Movies</string>
     <string name="title_movie_detail">Movie Detail</string>
     <string name="try_again_label">Try Again</string>
+    <string name="action_top_rated">Top rated</string>
+    <string name="action_most_popular">Most popular</string>
+
+
+    //Messages
     <string name="network_error_message">Unable to load movies. Please check your network connection :\'(</string>
 </resources>

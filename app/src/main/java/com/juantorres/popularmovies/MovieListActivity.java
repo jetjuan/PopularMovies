@@ -10,6 +10,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,6 +43,7 @@ public class MovieListActivity extends AppCompatActivity {
 
     public static final String POPULAR_MOVIES_PARAM = "POPULAR_MOVIES";
     public static final String TOP_RATED_PARAM = "TOP_RATED";
+    public static String CURRENT_SORT_PARAM = POPULAR_MOVIES_PARAM;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -76,10 +80,37 @@ public class MovieListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sort_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sort_most_popular:
+                CURRENT_SORT_PARAM = POPULAR_MOVIES_PARAM;
+                loadMovies(CURRENT_SORT_PARAM);
+                return true;
+
+            case R.id.action_sort_top_rated:
+                CURRENT_SORT_PARAM = TOP_RATED_PARAM;
+                loadMovies(CURRENT_SORT_PARAM);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
     @OnClick(R.id.try_again_button)
     public void tryAgain(View v){
         //TODO find a way to load the previously selected
-        loadMovies(POPULAR_MOVIES_PARAM);
+        loadMovies(CURRENT_SORT_PARAM);
     }
 
     public void showLoadingIndicator(){

@@ -1,10 +1,13 @@
 package com.juantorres.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by juantorres on 8/2/17.
  */
 
-public class Movie {
+public class Movie  implements Parcelable{
     private int id;
     private int voteCount;
     private boolean hasVideo;
@@ -17,6 +20,9 @@ public class Movie {
     private String backDropPath;
     private String overview;
 
+    public Movie(){
+        super();
+    }
 
     public int getId() {
         return id;
@@ -103,6 +109,49 @@ public class Movie {
     }
 
     public void setOverview(String overview) {
-        overview = overview;
+        this.overview = overview;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(this.id);
+        parcel.writeInt(this.voteCount);
+        parcel.writeInt(this.hasVideo ? 1 : 0);
+        parcel.writeDouble(this.voteAverage);
+        parcel.writeString(this.title);
+        parcel.writeDouble(this.popularity);
+        parcel.writeString(this.posterPath);
+        parcel.writeString(this.originalLanguage);
+        parcel.writeString(this.originalTitle);
+        parcel.writeString(this.backDropPath);
+        parcel.writeString(this.overview);
+    }
+
+    public Movie(Parcel pc){
+        this.id                   = pc.readInt();
+        this.voteCount            = pc.readInt();
+        this.hasVideo             = (pc.readInt() ==1);
+        this.voteAverage          = pc.readDouble();
+        this.title                = pc.readString();
+        this.popularity           = pc.readDouble();
+        this.posterPath           = pc.readString();
+        this.originalLanguage     = pc.readString();
+        this.originalTitle        = pc.readString();
+        this.backDropPath         = pc.readString();
+        this.overview             = pc.readString();
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel pc) {
+            return new Movie(pc);
+        }
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

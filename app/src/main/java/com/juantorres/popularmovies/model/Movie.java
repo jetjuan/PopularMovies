@@ -3,6 +3,9 @@ package com.juantorres.popularmovies.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by juantorres on 8/2/17.
  */
@@ -19,6 +22,7 @@ public class Movie  implements Parcelable{
     private String originalTitle;
     private String backDropPath;
     private String overview;
+    private Date releaseDate;
 
     public Movie(){
         super();
@@ -112,6 +116,14 @@ public class Movie  implements Parcelable{
         this.overview = overview;
     }
 
+    public Date getReleaseDate(){
+        return this.releaseDate;
+    }
+
+    public void setReleaseDate(Date date){
+        this.releaseDate = date;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -130,6 +142,7 @@ public class Movie  implements Parcelable{
         parcel.writeString(this.originalTitle);
         parcel.writeString(this.backDropPath);
         parcel.writeString(this.overview);
+        parcel.writeLong(this.releaseDate.getTime());
     }
 
     public Movie(Parcel pc){
@@ -144,6 +157,7 @@ public class Movie  implements Parcelable{
         this.originalTitle        = pc.readString();
         this.backDropPath         = pc.readString();
         this.overview             = pc.readString();
+        this.releaseDate          = new Date(pc.readLong());
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -154,4 +168,10 @@ public class Movie  implements Parcelable{
             return new Movie[size];
         }
     };
+
+    public int getReleaseYear(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.releaseDate);
+        return cal.get(Calendar.YEAR);
+    }
 }

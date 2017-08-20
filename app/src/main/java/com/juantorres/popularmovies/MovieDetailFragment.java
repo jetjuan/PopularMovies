@@ -1,7 +1,6 @@
 package com.juantorres.popularmovies;
 
 import android.app.Activity;
-import android.icu.text.DecimalFormat;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,7 +63,7 @@ public class MovieDetailFragment extends Fragment {
 
             mItem = getArguments().getParcelable(ARG_MOVIE);
             Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+            CollapsingToolbarLayout appBarLayout =  activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 appBarLayout.setTitle(mItem.getTitle());
             }

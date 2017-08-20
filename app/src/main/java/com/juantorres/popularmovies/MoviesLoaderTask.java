@@ -1,11 +1,9 @@
 package com.juantorres.popularmovies;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.widget.TextView;
 
 import com.juantorres.popularmovies.utils.NetworkUtils;
 
@@ -43,11 +41,7 @@ public class MoviesLoaderTask extends AsyncTask<String, Void, String> {
                     jsonString = NetworkUtils.getTopRatedMoviesJSONString();
                     break;
             }
-        }else{
-            //TODO Add code to display error message when device offline
         }
-
-        //TODO Fix code below
 
         return jsonString;
     }

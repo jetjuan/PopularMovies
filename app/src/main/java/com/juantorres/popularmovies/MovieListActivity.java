@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
 
 import com.juantorres.popularmovies.model.Movie;
 import com.juantorres.popularmovies.utils.JSONUtils;
@@ -49,7 +46,7 @@ public class MovieListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
+//    private boolean mTwoPane;
 
     @BindView(R.id.loading_indicator)
     public ProgressBar mLoadingIndicator;
@@ -69,15 +66,15 @@ public class MovieListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        loadMovies(POPULAR_MOVIES_PARAM);
+        loadMovies(CURRENT_SORT_PARAM);
 
-        if (findViewById(R.id.movie_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
+//        if (findViewById(R.id.movie_detail_container) != null) {
+//            // The detail container view will be present only in the
+//            // large-screen layouts (res/values-w900dp).
+//            // If this view is present, then the
+//            // activity should be in two-pane mode.
+//            mTwoPane = true;
+//        }
     }
 
     @Override
@@ -134,10 +131,10 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     public void setupRecyclerView(@NonNull String json) {
-        List moviePosters = JSONUtils.getMoviesFromJSONString(json);
+        List movies = JSONUtils.getMoviesFromJSONString(json);
 
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(moviePosters));
+        mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(movies));
 
     }
 
@@ -171,10 +168,10 @@ public class MovieListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             Movie movie = mMovies.get(position);
-            int movieID = movie.getId();
+//            int movieID = movie.getId();
             String posterURL = NetworkUtils.getPosterUrl( movie.getPosterPath());
 
-            holder.mView.setTag(movieID);
+            holder.mView.setTag(movie);
             Picasso.with(holder.mView.getContext()).load(posterURL).into(holder.mPosterImageView);
 
 
@@ -182,20 +179,23 @@ public class MovieListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putInt(MovieDetailFragment.ARG_ITEM_ID, (int) holder.mView.getTag());
-                        MovieDetailFragment fragment = new MovieDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.movie_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, MovieDetailActivity.class);
-                        intent.putExtra(MovieDetailFragment.ARG_ITEM_ID, (int) holder.mView.getTag());
+//                    if (mTwoPane) {
+//                        Bundle arguments = new Bundle();
+//                        arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
+//                        MovieDetailFragment fragment = new MovieDetailFragment();
+//                        fragment.setArguments(arguments);
+//                        getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.movie_detail_container, fragment)
+//                                .commit();
+//                    } else {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
+//                        intent.putExtra(MovieDetailFragment.ARG_MOVIE, new Gson().toJson(holder.mView.getTag()));
+                    intent.putExtra(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
 
-                    }
+                    //TODO: test below
+                    startActivity(intent);
+                    // }
                 }
             });
         }

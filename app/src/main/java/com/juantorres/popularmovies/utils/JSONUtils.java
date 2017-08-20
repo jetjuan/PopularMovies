@@ -8,7 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by juantorres on 8/3/17.
@@ -40,7 +43,9 @@ public class JSONUtils {
                 String originalLanguage = jsonMovie.getString("original_language");
                 String originalTitle = jsonMovie.getString("original_title");
                 String backdropPath = jsonMovie.getString("backdrop_path");
-
+                String releaseDateString = jsonMovie.getString("release_date");
+                Date releaseDate = new SimpleDateFormat("YYYY-MM-DD" ).parse(releaseDateString);
+                String overview = jsonMovie.getString("overview");
 
                 newMovie.setId(movieID);
                 newMovie.setTitle(title);
@@ -52,7 +57,8 @@ public class JSONUtils {
                 newMovie.setOriginalLanguage(originalLanguage);
                 newMovie.setOriginalTitle(originalTitle);
                 newMovie.setBackDropPath(backdropPath);
-
+                newMovie.setReleaseDate(releaseDate);
+                newMovie.setOverview(overview);
 
 
                 movies.add(newMovie);
@@ -60,7 +66,9 @@ public class JSONUtils {
             }
 
         }catch (JSONException e){
-
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         return movies;

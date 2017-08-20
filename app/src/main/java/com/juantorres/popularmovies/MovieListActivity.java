@@ -66,7 +66,7 @@ public class MovieListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        loadMovies(POPULAR_MOVIES_PARAM);
+        loadMovies(CURRENT_SORT_PARAM);
 
         if (findViewById(R.id.movie_detail_container) != null) {
             // The detail container view will be present only in the

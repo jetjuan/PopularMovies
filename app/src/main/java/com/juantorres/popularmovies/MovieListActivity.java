@@ -46,7 +46,7 @@ public class MovieListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private boolean mTwoPane;
+//    private boolean mTwoPane;
 
     @BindView(R.id.loading_indicator)
     public ProgressBar mLoadingIndicator;
@@ -68,13 +68,13 @@ public class MovieListActivity extends AppCompatActivity {
 
         loadMovies(CURRENT_SORT_PARAM);
 
-        if (findViewById(R.id.movie_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
+//        if (findViewById(R.id.movie_detail_container) != null) {
+//            // The detail container view will be present only in the
+//            // large-screen layouts (res/values-w900dp).
+//            // If this view is present, then the
+//            // activity should be in two-pane mode.
+//            mTwoPane = true;
+//        }
     }
 
     @Override
@@ -179,23 +179,23 @@ public class MovieListActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
-                        MovieDetailFragment fragment = new MovieDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.movie_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, MovieDetailActivity.class);
+//                    if (mTwoPane) {
+//                        Bundle arguments = new Bundle();
+//                        arguments.putParcelable(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
+//                        MovieDetailFragment fragment = new MovieDetailFragment();
+//                        fragment.setArguments(arguments);
+//                        getSupportFragmentManager().beginTransaction()
+//                                .replace(R.id.movie_detail_container, fragment)
+//                                .commit();
+//                    } else {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, MovieDetailActivity.class);
 //                        intent.putExtra(MovieDetailFragment.ARG_MOVIE, new Gson().toJson(holder.mView.getTag()));
-                        intent.putExtra(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
+                    intent.putExtra(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
 
-                        //TODO: test below
-                        startActivity(intent);
-                    }
+                    //TODO: test below
+                    startActivity(intent);
+                    // }
                 }
             });
         }

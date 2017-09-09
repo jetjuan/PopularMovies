@@ -1,5 +1,8 @@
 package com.juantorres.popularmovies.utils;
 
+
+import com.juantorres.popularmovies.BuildConfig;
+
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
@@ -14,7 +17,7 @@ public class NetworkUtils {
     final static String BASE_URL = "http://api.themoviedb.org/3";
     final static String POSTER_BASE_URL = "http://image.tmdb.org/t/p/";
 
-    final static String API_KEY = ""; //TODO: Get your own APY KEY here: https://www.themoviedb.org/faq/api
+    final static String API_KEY = BuildConfig.THE_MOVIE_DB_API_TOKEN; //TODO: Get your own APY KEY here: https://www.themoviedb.org/faq/api
 
 
     final static String API_KEY_PARAM = "?api_key=" + API_KEY;

@@ -16,10 +16,14 @@
         tools:src="@mipmap/ic_launcher_round"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintRight_toLeftOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/small_margin"
         android:layout_marginEnd="@dimen/small_margin"
+        android:layout_marginRight="@dimen/small_margin"
         android:minHeight="@dimen/movie_poster_min_height"
         android:minWidth="@dimen/movie_poster_min_width"/>
 
@@ -30,11 +34,14 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         tools:text="@string/tool_release_date"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
-        android:layout_marginLeft="@dimen/zero"
         app:layout_constraintTop_toTopOf="@+id/iv_movie_poster_small"
         android:layout_marginTop="@dimen/large_top_margin"
-        android:layout_marginStart="@dimen/zero" />
+        android:layout_marginStart="@dimen/zero"
+        android:layout_marginLeft="@dimen/zero"
+
+        />
 
 
     <TextView
@@ -45,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@string/tool_user_rating"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
         android:layout_marginTop="@dimen/small_margin"
         app:layout_constraintTop_toBottomOf="@+id/tv_movie_release_year" />
@@ -54,11 +62,13 @@
         android:layout_width="@dimen/small_icon_size"
         android:layout_height="@dimen/small_icon_size"
         android:src="@drawable/ic_star_black_24dp"
+        app:layout_constraintStart_toEndOf="@+id/tv_movie_rating"
         app:layout_constraintLeft_toRightOf="@+id/tv_movie_rating"
-        android:layout_marginLeft="@dimen/small_margin"
         app:layout_constraintTop_toTopOf="@+id/tv_movie_rating"
         app:layout_constraintBottom_toBottomOf="@+id/tv_movie_rating"
-        android:layout_marginStart="@dimen/small_margin" />
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/small_margin"
+        />
 
     <TextView
         android:id="@+id/tv_movie_overview"
@@ -69,7 +79,9 @@
         android:textSize="@dimen/text_size_medium_phone"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:text="@string/tool_plot_synopsis"
         android:layout_marginTop="@dimen/small_margin"

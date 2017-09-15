@@ -3,6 +3,7 @@ package com.juantorres.popularmovies.utils;
 import android.support.annotation.NonNull;
 
 import com.juantorres.popularmovies.model.Movie;
+import com.juantorres.popularmovies.model.Trailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,9 @@ import java.util.Date;
  */
 
 public class JSONUtils {
+
+    private final static String EXPECTED_SITE = "YouTube";
+    private final static String EXPECTED_VIDEO_TYPE   = "Trailer";
 
     public static ArrayList<Movie> getMoviesFromJSONString (@NonNull String jsonString) {
         ArrayList<Movie> movies = null;
@@ -72,5 +76,43 @@ public class JSONUtils {
         }
 
         return movies;
+    }
+
+    public static ArrayList<Trailer> getTrailersFromJSONString (@NonNull String jsonString) {
+        ArrayList<Trailer> trailers = null;
+
+        try {
+            trailers = new ArrayList<>();
+            JSONObject json = new JSONObject(jsonString);
+
+
+            JSONArray trailersInJSON = json.getJSONArray("results");
+
+            for (int i = 0; i < trailersInJSON.length(); i++) {
+                JSONObject jsonTrailer = trailersInJSON.getJSONObject(i);
+
+                if( (!jsonTrailer.get("type").equals(EXPECTED_VIDEO_TYPE) || (!jsonTrailer.get("site").equals(EXPECTED_SITE))) ){
+                    continue;
+                }
+
+                Trailer newTrailer = new Trailer();
+
+                String trailerID = jsonTrailer.getString("id");
+                String name      = jsonTrailer.getString("name");
+                String key       = jsonTrailer.getString("key");
+
+                newTrailer.setTrailerID(trailerID);
+                newTrailer.setName(name);
+                newTrailer.setYoutubeKey(key);
+
+                trailers.add(newTrailer);
+
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return trailers;
     }
 }

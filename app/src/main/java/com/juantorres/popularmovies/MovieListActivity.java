@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.juantorres.popularmovies.model.Movie;
+import com.juantorres.popularmovies.tasks.MoviesLoaderTask;
 import com.juantorres.popularmovies.utils.JSONUtils;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;

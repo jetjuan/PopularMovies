@@ -1,10 +1,11 @@
-package com.juantorres.popularmovies;
+package com.juantorres.popularmovies.tasks;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
+import com.juantorres.popularmovies.MovieListActivity;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 
 /**

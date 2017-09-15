@@ -1,6 +1,7 @@
 package com.juantorres.popularmovies;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.juantorres.popularmovies.model.Movie;
@@ -48,12 +50,12 @@ public class MovieDetailFragment extends Fragment {
     private Movie mItem;
     private ArrayList<Trailer> mTrailers;
 
-    @BindView(R.id.tv_movie_release_year)  public TextView   mtvReleaseYear;
+    @BindView(R.id.tv_movie_release_year)  public TextView     mtvReleaseYear;
 //    @BindView(R.id.tv_movie_duration)      public TextView   mtvDuration;
-    @BindView(R.id.tv_movie_overview)      public TextView   mtvMovieOverview;
-    @BindView(R.id.tv_movie_rating)        public TextView   mtvRating;
-    @BindView(R.id.iv_movie_poster_small)  public ImageView  mivSmallPoster;
-    @BindView(R.id.lv_trailers)            public ListView   mlvTrailers;
+    @BindView(R.id.tv_movie_overview)      public TextView     mtvMovieOverview;
+    @BindView(R.id.tv_movie_rating)        public TextView     mtvRating;
+    @BindView(R.id.iv_movie_poster_small)  public ImageView    mivSmallPoster;
+    @BindView(R.id.trailers_list)          public LinearLayout mTrailersList;
 
 
 
@@ -131,42 +133,28 @@ public class MovieDetailFragment extends Fragment {
 
     public void displayTrailers(String json){
         mTrailers = JSONUtils.getTrailersFromJSONString(json);
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
 
-        List<String> trailerStrings = new ArrayList<String>();
-        for (Trailer currentTrailer : mTrailers) {
-            trailerStrings.add(currentTrailer.getName());
+
+        for (final Trailer currentTrailer : mTrailers) {
+            View inflatedLayout= inflater.inflate(R.layout.movie_trailer, null, false);
+            inflatedLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String youtubeURL = NetworkUtils.getYoutubeURL(currentTrailer.getYoutubeKey());
+
+                    Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL));
+                    startActivity(youtubeIntent);
+                }
+            });
+
+            TextView trailerName = inflatedLayout.findViewById(R.id.tv_trailer_name);
+            trailerName.setText(currentTrailer.getName());
+
+            mTrailersList.addView(inflatedLayout);
         }
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(),
-                R.layout.movie_trailer, R.id.tv_trailer_name,
-                trailerStrings.toArray(new String[trailerStrings.size()]));
-        mlvTrailers.setAdapter(adapter);
-
-//        mlvTrailers.setOnItemClickListener(new OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent,
-//                                    View view,
-//                                    int position,
-//                                    long id) {
-//                // Get clicked project.
-//                Project project = mProjects.get(position);
-//                // Open the activity for the selected project.
-//                Intent projectIntent = new Intent(MainActivity.this, ProjectActivity.class);
-//                projectIntent.putExtra("project_id", project.getId());
-//                MainActivity.this.startActivity(projectIntent);
     }
 
-    @OnItemClick(R.id.lv_trailers)
-    public void playVideo(int position){
-
-        Trailer trailer = mTrailers.get(position);
-        String youtubeURL = NetworkUtils.getYoutubeURL(trailer.getYoutubeKey());
-
-        Intent youtubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL));
-        startActivity(youtubeIntent);
-    }
 
 
     public void displayReviews(){

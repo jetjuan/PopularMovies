@@ -17,7 +17,7 @@
     <dimen name="movie_poster_min_height">150dp</dimen>
     <dimen name="movie_poster_min_width">300dp</dimen>
     <dimen name="small_icon_size">16dp</dimen>
-    <dimen name="cloud_off_icon_size">24dp</dimen>
+    <dimen name="cloud_off_icon_size">96dp</dimen>
     <dimen name="play_icon_size">32dp</dimen>
 
 

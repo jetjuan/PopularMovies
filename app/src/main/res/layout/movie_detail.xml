@@ -111,14 +111,16 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ListView
-        android:id="@+id/lv_trailers"
+    <LinearLayout
+        android:id="@+id/trailers_list"
         android:layout_width="395dp"
-        android:layout_height="800dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="@dimen/small_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_trailers_label"
+        tools:text="text"
         tools:layout_editor_absoluteX="8dp"
         tools:minHeight="150dp" />
 

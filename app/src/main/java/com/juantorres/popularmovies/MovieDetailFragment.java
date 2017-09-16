@@ -1,6 +1,7 @@
 package com.juantorres.popularmovies;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,11 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.juantorres.popularmovies.model.Movie;
+import com.juantorres.popularmovies.model.Review;
 import com.juantorres.popularmovies.model.Trailer;
 import com.juantorres.popularmovies.tasks.MovieDetailsLoaderTask;
 import com.juantorres.popularmovies.tasks.MoviesLoaderTask;
@@ -49,13 +53,15 @@ public class MovieDetailFragment extends Fragment {
      */
     private Movie mItem;
     private ArrayList<Trailer> mTrailers;
+    private ArrayList<Review>  mReviews;
 
     @BindView(R.id.tv_movie_release_year)  public TextView     mtvReleaseYear;
-//    @BindView(R.id.tv_movie_duration)      public TextView   mtvDuration;
     @BindView(R.id.tv_movie_overview)      public TextView     mtvMovieOverview;
     @BindView(R.id.tv_movie_rating)        public TextView     mtvRating;
     @BindView(R.id.iv_movie_poster_small)  public ImageView    mivSmallPoster;
     @BindView(R.id.trailers_list)          public LinearLayout mTrailersList;
+    @BindView(R.id.reviews_list)           public LinearLayout mReviewList;
+//    private ProgressBar progressBar;
 
 
 
@@ -96,7 +102,7 @@ public class MovieDetailFragment extends Fragment {
 
         // Display movie data.
         displayMovieData();
-        //
+        //Loading trailers and reviews...
         loadDetails(String.valueOf(mItem.getId()));
         return rootView;
     }
@@ -118,6 +124,7 @@ public class MovieDetailFragment extends Fragment {
                     .into(mivSmallPoster);
 
         }
+
     }
 
     public void loadDetails(String movieID){
@@ -152,17 +159,42 @@ public class MovieDetailFragment extends Fragment {
             trailerName.setText(currentTrailer.getName());
 
             mTrailersList.addView(inflatedLayout);
+
         }
     }
 
 
 
-    public void displayReviews(){
+    public void displayReviews(String json){
+        mReviews = JSONUtils.getReviewsFromJSONString(json);
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
 
-    }
+
+        for(final Review currentReview : mReviews) {
+            View inflatedLayout     = inflater.inflate(R.layout.movie_review, null, false);
+            TextView author         = inflatedLayout.findViewById(R.id.tv_review_author);
+            TextView content        = inflatedLayout.findViewById(R.id.tv_review_content);
+            Button readMoreButton   = inflatedLayout.findViewById(R.id.btn_read_more);
+
+            author.setText(currentReview.getAuthor());
+            content.setText(currentReview.getContent());
+
+            readMoreButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = currentReview.getUrl();
+
+                    Intent openReviewURLIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(openReviewURLIntent);
+                }
+            });
+
+            mReviewList.addView(inflatedLayout);
+
+        }    }
 
     public void showLoadingIndicator(){
-
+//        progressBar = new ProgressBar(this.getContext(), null, android.R.attr.progressBarStyleSmall);
     }
 
     public void showMovieData(){

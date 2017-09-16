@@ -2,13 +2,10 @@ package com.juantorres.popularmovies.tasks;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 
-import com.juantorres.popularmovies.MovieDetailActivity;
 import com.juantorres.popularmovies.MovieDetailFragment;
-import com.juantorres.popularmovies.MovieListActivity;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 
 /**
@@ -37,8 +34,8 @@ public class MovieDetailsLoaderTask extends AsyncTask<String, Void, String[]> {
         String movieID = param[0];
 
         if(isDeviceOnline()){
-            trailersJsonString = NetworkUtils.getTrailersJSONString(param[0]);
-            reviewsJsonString  = NetworkUtils.getReviewsJSONString(param[0]);
+            trailersJsonString = NetworkUtils.getTrailersJSONString(movieID);
+            reviewsJsonString  = NetworkUtils.getReviewsJSONString(movieID);
         }
 
         return new String[]{trailersJsonString, reviewsJsonString};
@@ -57,7 +54,7 @@ public class MovieDetailsLoaderTask extends AsyncTask<String, Void, String[]> {
                 fragment.showSplashScreen();
             }else {
                 fragment.displayTrailers(trailers);
-//                fragment.mtvMovieReviews.setText(reviews);
+                fragment.displayReviews(reviews);
 
 //            activity.setupRecyclerView(jsonString);
 //                activity.showMovieData();
@@ -67,7 +64,6 @@ public class MovieDetailsLoaderTask extends AsyncTask<String, Void, String[]> {
     }
 
     public boolean isDeviceOnline(){
-        //TODO: implement method properly
         ConnectivityManager cm =
                 (ConnectivityManager) fragment.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

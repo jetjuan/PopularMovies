@@ -3,6 +3,7 @@ package com.juantorres.popularmovies.utils;
 import android.support.annotation.NonNull;
 
 import com.juantorres.popularmovies.model.Movie;
+import com.juantorres.popularmovies.model.Review;
 import com.juantorres.popularmovies.model.Trailer;
 
 import org.json.JSONArray;
@@ -114,5 +115,35 @@ public class JSONUtils {
         }
 
         return trailers;
+    }
+
+    public static ArrayList<Review> getReviewsFromJSONString (@NonNull String jsonString) {
+        ArrayList<Review> reviews = null;
+
+        try {
+            reviews = new ArrayList<>();
+            JSONObject json = new JSONObject(jsonString);
+
+
+            JSONArray reviewsInJSON = json.getJSONArray("results");
+
+            for (int i = 0; i < reviewsInJSON.length(); i++) {
+                JSONObject jsonReview = reviewsInJSON.getJSONObject(i);
+
+                String reviewID      = jsonReview.getString("id");
+                String author        = jsonReview.getString("author");
+                String content       = jsonReview.getString("content");
+                String url           = jsonReview.getString("url");
+
+                Review newReview = new Review(reviewID, author, content, url);
+                reviews.add(newReview);
+
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return reviews;
     }
 }

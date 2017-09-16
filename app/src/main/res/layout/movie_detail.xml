@@ -122,6 +122,32 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_trailers_label"
         tools:text="text"
         tools:layout_editor_absoluteX="8dp"
-        tools:minHeight="150dp" />
+        tools:minHeight="10dp" />
+
+    <TextView
+        android:id="@+id/tv_reviews_label"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews_label"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginLeft="@dimen/small_margin"
+        app:layout_constraintTop_toBottomOf="@+id/trailers_list"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/reviews_list"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_reviews_label"
+        tools:text="text"
+        tools:layout_editor_absoluteX="8dp"
+        tools:minHeight="10dp" />
 
 </android.support.constraint.ConstraintLayout>

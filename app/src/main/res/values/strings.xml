@@ -7,6 +7,7 @@
     <string name="tool_user_rating">3.5/10</string>
     <string name="tool_release_date">2016</string>
     <string name="tool_movie_length">120min</string>
+    <string name="tool_review_author">Sasuke Uchiha</string>
 
     <!--Labels-->
     <string name="title_movie_list">Movies</string>
@@ -15,6 +16,8 @@
     <string name="action_top_rated">Top rated</string>
     <string name="action_most_popular">Most popular</string>
     <string name="trailers_label">Trailers</string>
+    <string name="reviews_label">Reviews</string>
+    <string name="read_more_label">Read More</string>
 
 
      <!--Messages-->

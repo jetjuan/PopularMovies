@@ -150,4 +150,16 @@
         tools:layout_editor_absoluteX="8dp"
         tools:minHeight="10dp" />
 
+    <ImageButton
+        android:id="@+id/btn_favorite"
+        android:layout_width="@dimen/favorite_button_size"
+        android:layout_height="@dimen/favorite_button_size"
+        android:background="@null"
+        android:layout_marginLeft="@dimen/medium_margin"
+        android:layout_marginTop="@dimen/zero"
+        android:src="@drawable/ic_star"
+        app:layout_constraintLeft_toRightOf="@+id/tv_movie_release_year"
+        app:layout_constraintStart_toEndOf="@+id/tv_movie_release_year"
+        app:layout_constraintTop_toTopOf="@+id/tv_movie_release_year" />
+
 </android.support.constraint.ConstraintLayout>

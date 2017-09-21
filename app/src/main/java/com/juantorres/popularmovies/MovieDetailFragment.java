@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,7 +36,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnTouch;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -61,6 +66,7 @@ public class MovieDetailFragment extends Fragment {
     @BindView(R.id.iv_movie_poster_small)  public ImageView    mivSmallPoster;
     @BindView(R.id.trailers_list)          public LinearLayout mTrailersList;
     @BindView(R.id.reviews_list)           public LinearLayout mReviewList;
+    @BindView(R.id.btn_favorite)           public ImageButton  mFavoriteButton;
 //    private ProgressBar progressBar;
 
 
@@ -124,6 +130,12 @@ public class MovieDetailFragment extends Fragment {
                     .into(mivSmallPoster);
 
         }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
 
     }
 
@@ -203,5 +215,26 @@ public class MovieDetailFragment extends Fragment {
 
     public void showSplashScreen(){
 
+    }
+
+    @OnClick(R.id.btn_favorite)
+    public void favoriteButtonClicked(View v){
+
+            //TODO: check if movie exists on DB
+        //if exists, display the button as clicked
+
+
+        mItem.setFavorite( !mItem.isFavorite());
+        showFavoriteButtonPressed(mItem.isFavorite());
+
+
+    }
+
+    private void showFavoriteButtonPressed(boolean pressed){
+        if(pressed){
+            mFavoriteButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_yellow_24dp));
+        }else{
+            mFavoriteButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_border_yellow_24dp));
+        }
     }
 }

@@ -133,6 +133,10 @@ public class Movie  implements Parcelable{
         isFavorite = favorite;
     }
 
+    public String getIdAsString(){
+        return String.valueOf(this.id);
+    }
+
     @Override
     public int describeContents() {
         return 0;

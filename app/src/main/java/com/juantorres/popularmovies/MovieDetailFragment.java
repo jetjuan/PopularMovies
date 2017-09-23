@@ -1,10 +1,8 @@
 package com.juantorres.popularmovies;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,17 +11,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.juantorres.popularmovies.db.MovieContract;
@@ -31,19 +24,15 @@ import com.juantorres.popularmovies.model.Movie;
 import com.juantorres.popularmovies.model.Review;
 import com.juantorres.popularmovies.model.Trailer;
 import com.juantorres.popularmovies.tasks.MovieDetailsLoaderTask;
-import com.juantorres.popularmovies.tasks.MoviesLoaderTask;
 import com.juantorres.popularmovies.utils.JSONUtils;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
-import butterknife.OnTouch;
 
 /**
  * A fragment representing a single Movie detail screen.
@@ -61,7 +50,7 @@ public class MovieDetailFragment extends Fragment {
     /**
      * The movie content this fragment is presenting.
      */
-    private Movie mItem;
+    private Movie mMovie;
     private ArrayList<Trailer> mTrailers;
     private ArrayList<Review>  mReviews;
 
@@ -94,11 +83,14 @@ public class MovieDetailFragment extends Fragment {
             // to load content from a content provider.
 //            mMovie = DummyContent.ITEM_MAP.get(getArguments().getInt(ARG_ITEM_ID));
 
-            mItem = getArguments().getParcelable(ARG_MOVIE);
+            mMovie = getArguments().getParcelable(ARG_MOVIE);
+            mMovie.setFavorite(
+                    existsInDB(mMovie.getIdAsString())
+            );
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout =  activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getTitle());
+                appBarLayout.setTitle(mMovie.getTitle());
             }
         }
     }
@@ -114,18 +106,18 @@ public class MovieDetailFragment extends Fragment {
         // Display movie data.
         displayMovieData();
         //Loading trailers and reviews...
-        loadDetails(String.valueOf(mItem.getId()));
+        loadDetails(mMovie.getIdAsString());
         return rootView;
     }
 
     private void displayMovieData(){
-        if (mItem != null) {
-            String voteAverageString = String.valueOf(mItem.getVoteAverage()) + "/10";
-            String releaseYear       = String.valueOf(mItem.getReleaseYear());
+        if (mMovie != null) {
+            String voteAverageString = String.valueOf(mMovie.getVoteAverage()) + "/10";
+            String releaseYear       = String.valueOf(mMovie.getReleaseYear());
 
-            String posterUrl         = NetworkUtils.getPosterUrl(mItem.getPosterPath());
+            String posterUrl         = NetworkUtils.getPosterUrl(mMovie.getPosterPath());
             mtvReleaseYear.setText(releaseYear);
-            mtvMovieOverview.setText(mItem.getOverview());
+            mtvMovieOverview.setText(mMovie.getOverview());
             mtvRating.setText(voteAverageString);
 
             Picasso.with(getContext())
@@ -136,11 +128,7 @@ public class MovieDetailFragment extends Fragment {
 
         }
 
-        //TODO:Delete me
-        boolean isFavMovie = existsInDB(String.valueOf(mItem.getId()));
-        showFavoriteButtonPressed(isFavMovie);
-        mItem.setFavorite(isFavMovie);
-
+        showFavoriteButtonPressed(mMovie.isFavorite());
     }
 
     @Override
@@ -161,6 +149,7 @@ public class MovieDetailFragment extends Fragment {
     }
 
     public void displayTrailers(String json){
+        mTrailersList.removeAllViews();
         mTrailers = JSONUtils.getTrailersFromJSONString(json);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
 
@@ -188,6 +177,7 @@ public class MovieDetailFragment extends Fragment {
 
 
     public void displayReviews(String json){
+        mReviewList.removeAllViews();
         mReviews = JSONUtils.getReviewsFromJSONString(json);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
 
@@ -213,7 +203,8 @@ public class MovieDetailFragment extends Fragment {
 
             mReviewList.addView(inflatedLayout);
 
-        }    }
+        }
+    }
 
     public void showLoadingIndicator(){
 //        progressBar = new ProgressBar(this.getContext(), null, android.R.attr.progressBarStyleSmall);
@@ -230,19 +221,17 @@ public class MovieDetailFragment extends Fragment {
     @OnClick(R.id.btn_favorite)
     public void favoriteButtonClicked(View v){
 
-        String movieID = String.valueOf(mItem.getId());
+        String movieID = mMovie.getIdAsString();
 
-        if(mItem.isFavorite()){
+        if(mMovie.isFavorite()){
             deleteMovie(movieID);
-            mItem.setFavorite(false);
+            mMovie.setFavorite(false);
         }else{
-            //TODO:insert
-            mItem.setFavorite(true);
             saveMovie(movieID);
+            mMovie.setFavorite(true);
         }
 
-        showFavoriteButtonPressed(mItem.isFavorite());
-
+        showFavoriteButtonPressed(mMovie.isFavorite());
 
     }
 
@@ -275,14 +264,14 @@ public class MovieDetailFragment extends Fragment {
         ContentResolver resolver = getContext().getContentResolver();
 
         ContentValues cv = new ContentValues();
-        cv.put(MovieContract.Movie.COLUMN_NAME_TITLE, mItem.getTitle());
-        cv.put(MovieContract.Movie.COLUMN_NAME_IS_FAVORITE, mItem.isFavorite());
+        cv.put(MovieContract.Movie.COLUMN_NAME_TITLE, mMovie.getTitle());
+        cv.put(MovieContract.Movie.COLUMN_NAME_IS_FAVORITE, mMovie.isFavorite());
         cv.put(MovieContract.Movie.COLUMN_NAME_MOVIEDB_ID, ID);
-        cv.put(MovieContract.Movie.COLUMN_NAME_ORIGINAL_TITLE, mItem.getOriginalTitle());
-        cv.put(MovieContract.Movie.COLUMN_NAME_OVERVIEW, mItem.getOverview());
-        cv.put(MovieContract.Movie.COLUMN_NAME_POPULARITY, mItem.getPopularity());
-        cv.put(MovieContract.Movie.COLUMN_NAME_PORTER_PATH, mItem.getPosterPath());
-        cv.put(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE, mItem.getReleaseYear());
+        cv.put(MovieContract.Movie.COLUMN_NAME_ORIGINAL_TITLE, mMovie.getOriginalTitle());
+        cv.put(MovieContract.Movie.COLUMN_NAME_OVERVIEW, mMovie.getOverview());
+        cv.put(MovieContract.Movie.COLUMN_NAME_POPULARITY, mMovie.getPopularity());
+        cv.put(MovieContract.Movie.COLUMN_NAME_PORTER_PATH, mMovie.getPosterPath());
+        cv.put(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE, mMovie.getReleaseYear());
 
         return resolver.insert( Uri.parse(MovieContract.CONTENT_URI), cv);
     }

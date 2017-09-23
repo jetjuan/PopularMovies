@@ -2,8 +2,11 @@ package com.juantorres.popularmovies;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
@@ -22,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.juantorres.popularmovies.db.MovieContract;
 import com.juantorres.popularmovies.model.Movie;
 import com.juantorres.popularmovies.model.Review;
 import com.juantorres.popularmovies.model.Trailer;
@@ -131,6 +136,11 @@ public class MovieDetailFragment extends Fragment {
 
         }
 
+        //TODO:Delete me
+        boolean isFavMovie = existsInDB(String.valueOf(mItem.getId()));
+        showFavoriteButtonPressed(isFavMovie);
+        mItem.setFavorite(isFavMovie);
+
     }
 
     @Override
@@ -220,11 +230,17 @@ public class MovieDetailFragment extends Fragment {
     @OnClick(R.id.btn_favorite)
     public void favoriteButtonClicked(View v){
 
-            //TODO: check if movie exists on DB
-        //if exists, display the button as clicked
+        String movieID = String.valueOf(mItem.getId());
 
+        if(mItem.isFavorite()){
+            deleteMovie(movieID);
+            mItem.setFavorite(false);
+        }else{
+            //TODO:insert
+            mItem.setFavorite(true);
+            saveMovie(movieID);
+        }
 
-        mItem.setFavorite( !mItem.isFavorite());
         showFavoriteButtonPressed(mItem.isFavorite());
 
 
@@ -236,5 +252,38 @@ public class MovieDetailFragment extends Fragment {
         }else{
             mFavoriteButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_star_border_yellow_24dp));
         }
+    }
+
+    private boolean existsInDB(String ID){
+        ContentResolver resolver = getContext().getContentResolver();
+        Cursor result = resolver.query( Uri.parse(MovieContract.CONTENT_URI + "/"+ID), null, null, null, null);
+
+        if(result == null){
+            return false;
+        }else {
+            return result.getCount() > 0;
+        }
+
+    }
+
+    private long deleteMovie(String ID){
+        ContentResolver resolver = getContext().getContentResolver();
+        return resolver.delete(Uri.parse(MovieContract.CONTENT_URI + "/" + ID), null, null);
+    }
+
+    private Uri saveMovie(String ID){
+        ContentResolver resolver = getContext().getContentResolver();
+
+        ContentValues cv = new ContentValues();
+        cv.put(MovieContract.Movie.COLUMN_NAME_TITLE, mItem.getTitle());
+        cv.put(MovieContract.Movie.COLUMN_NAME_IS_FAVORITE, mItem.isFavorite());
+        cv.put(MovieContract.Movie.COLUMN_NAME_MOVIEDB_ID, ID);
+        cv.put(MovieContract.Movie.COLUMN_NAME_ORIGINAL_TITLE, mItem.getOriginalTitle());
+        cv.put(MovieContract.Movie.COLUMN_NAME_OVERVIEW, mItem.getOverview());
+        cv.put(MovieContract.Movie.COLUMN_NAME_POPULARITY, mItem.getPopularity());
+        cv.put(MovieContract.Movie.COLUMN_NAME_PORTER_PATH, mItem.getPosterPath());
+        cv.put(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE, mItem.getReleaseYear());
+
+        return resolver.insert( Uri.parse(MovieContract.CONTENT_URI), cv);
     }
 }

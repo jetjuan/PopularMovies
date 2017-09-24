@@ -36,6 +36,8 @@ public class MovieDetailsLoaderTask extends AsyncTask<String, Void, String[]> {
         if(isDeviceOnline()){
             trailersJsonString = NetworkUtils.getTrailersJSONString(movieID);
             reviewsJsonString  = NetworkUtils.getReviewsJSONString(movieID);
+        }else {
+
         }
 
         return new String[]{trailersJsonString, reviewsJsonString};
@@ -51,7 +53,7 @@ public class MovieDetailsLoaderTask extends AsyncTask<String, Void, String[]> {
 
 
             if(trailers == null || reviews == null){
-                fragment.showSplashScreen();
+                fragment.showRetryButton();
             }else {
                 fragment.displayTrailers(trailers);
                 fragment.displayReviews(reviews);

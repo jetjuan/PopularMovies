@@ -233,15 +233,37 @@ public class MovieDetailFragment extends Fragment {
     }
 
     public void showLoadingIndicator(){
-//        progressBar = new ProgressBar(this.getContext(), null, android.R.attr.progressBarStyleSmall);
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
+        View loadingIndicatorReviews = inflater.inflate(R.layout.loading_layout, null, false );
+        View loadingIndicatorTrailers = inflater.inflate(R.layout.loading_layout, null, false );
+
+
+        mTrailersList.removeAllViews();
+        mReviewList.removeAllViews();
+        mTrailersList.addView(loadingIndicatorTrailers);
+        mReviewList.addView(loadingIndicatorReviews);
     }
 
-    public void showMovieData(){
+    public void showRetryButton(){
+        final String id = mMovie.getIdAsString();
+        LayoutInflater inflater = LayoutInflater.from(this.getContext());
+        View retryReviews = inflater.inflate(R.layout.retry_layout, null, false );
+        View retryTrailers = inflater.inflate(R.layout.retry_layout, null, false );
 
-    }
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadDetails(id);
+            }
+        };
 
-    public void showSplashScreen(){
+        retryReviews.findViewById(R.id.btn_retry).setOnClickListener(listener);
+        retryTrailers.findViewById(R.id.btn_retry).setOnClickListener(listener);
 
+        mTrailersList.removeAllViews();
+        mTrailersList.addView(retryTrailers);
+        mReviewList.removeAllViews();
+        mReviewList.addView(retryReviews);
     }
 
     @OnClick(R.id.btn_favorite)
@@ -315,4 +337,5 @@ public class MovieDetailFragment extends Fragment {
         mReviewList.setVisibility(View.GONE);
 
     }
+
 }

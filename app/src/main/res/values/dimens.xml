@@ -20,6 +20,7 @@
     <dimen name="cloud_off_icon_size">96dp</dimen>
     <dimen name="play_icon_size">32dp</dimen>
     <dimen name="favorite_button_size">24dp</dimen>
+    <dimen name="retry_button_size">48dp</dimen>
 
 
 </resources>

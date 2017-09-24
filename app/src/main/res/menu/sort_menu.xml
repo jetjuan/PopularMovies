@@ -12,5 +12,9 @@
         android:icon="@drawable/ic_stars_black_24dp"
         android:title="@string/action_top_rated"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_sort_top_favorites"
+        android:title="@string/action_favorites"
+        app:showAsAction="never"/>
 
 </menu>

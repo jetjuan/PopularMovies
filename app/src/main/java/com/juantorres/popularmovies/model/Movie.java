@@ -23,6 +23,7 @@ public class Movie  implements Parcelable{
     private String backDropPath;
     private String overview;
     private Date releaseDate;
+    private boolean isFavorite;
 
     public Movie(){
         super();
@@ -124,6 +125,18 @@ public class Movie  implements Parcelable{
         this.releaseDate = date;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getIdAsString(){
+        return String.valueOf(this.id);
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -134,6 +147,7 @@ public class Movie  implements Parcelable{
         parcel.writeInt(this.id);
         parcel.writeInt(this.voteCount);
         parcel.writeInt(this.hasVideo ? 1 : 0);
+        parcel.writeInt(this.isFavorite ? 1 : 0);
         parcel.writeDouble(this.voteAverage);
         parcel.writeString(this.title);
         parcel.writeDouble(this.popularity);
@@ -149,6 +163,7 @@ public class Movie  implements Parcelable{
         this.id                   = pc.readInt();
         this.voteCount            = pc.readInt();
         this.hasVideo             = (pc.readInt() ==1);
+        this.isFavorite           = (pc.readInt() ==1);
         this.voteAverage          = pc.readDouble();
         this.title                = pc.readString();
         this.popularity           = pc.readDouble();

@@ -25,6 +25,7 @@
         </activity>
 
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".MovieDetailActivity"
             android:label="@string/title_movie_detail"
             android:parentActivityName=".MovieListActivity"

@@ -2,6 +2,7 @@ package com.juantorres.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.juantorres.popularmovies.db.MovieContract;
 import com.juantorres.popularmovies.model.Movie;
 import com.juantorres.popularmovies.tasks.MoviesLoaderTask;
 import com.juantorres.popularmovies.utils.JSONUtils;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +47,7 @@ public class MovieListActivity extends AppCompatActivity {
 
     public static final String POPULAR_MOVIES_PARAM = "POPULAR_MOVIES";
     public static final String TOP_RATED_PARAM = "TOP_RATED";
+    public static final String FAVORITE_MOVIES_PARAM = "FAVORITE_MOVIES";
     public static String CURRENT_SORT_PARAM = POPULAR_MOVIES_PARAM;
 
     /**
@@ -97,6 +105,11 @@ public class MovieListActivity extends AppCompatActivity {
                 loadMovies(CURRENT_SORT_PARAM);
                 return true;
 
+            case R.id.action_sort_top_favorites:
+                CURRENT_SORT_PARAM = FAVORITE_MOVIES_PARAM;
+                loadMovies(FAVORITE_MOVIES_PARAM);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -132,6 +145,47 @@ public class MovieListActivity extends AppCompatActivity {
 
     public void setupRecyclerView(@NonNull String json) {
         List movies = JSONUtils.getMoviesFromJSONString(json);
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(movies));
+
+    }
+
+    public void setupRecyclerView(@NonNull Cursor cursor) {
+        List movies = new ArrayList();
+
+        while(cursor.moveToNext()){
+            String id               = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_MOVIEDB_ID));
+            String title            = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_TITLE));
+            double popularity       = cursor.getDouble( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_POPULARITY));
+            String posterPath       = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_PORTER_PATH));
+            String originalTitle    = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_ORIGINAL_TITLE));
+            String overview         = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_OVERVIEW));
+            String releaseDate      = cursor.getString( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE));
+            double voteAverage      = cursor.getDouble( cursor.getColumnIndex(MovieContract.Movie.COLUMN_NAME_VOTE_AVERAGE));
+            boolean favorite        = true;
+            Date date = null;
+
+            DateFormat formatter = new SimpleDateFormat("yyyy/mm/dd");
+            try {
+                date = formatter.parse(releaseDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Movie movie = new Movie();
+            movie.setFavorite(favorite);
+            movie.setId( Integer.parseInt(id) );
+            movie.setTitle( title);
+            movie.setPopularity(popularity);
+            movie.setPosterPath(posterPath);
+            movie.setOriginalTitle(originalTitle);
+            movie.setOverview(overview);
+            movie.setReleaseDate(date );
+            movie.setVoteAverage(voteAverage);
+
+            movies.add(movie);
+        }
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(movies));
@@ -189,11 +243,12 @@ public class MovieListActivity extends AppCompatActivity {
 //                                .commit();
 //                    } else {
                     Context context = v.getContext();
+                    Movie selectedMovie = (Movie) holder.mView.getTag();
                     Intent intent = new Intent(context, MovieDetailActivity.class);
-//                        intent.putExtra(MovieDetailFragment.ARG_MOVIE, new Gson().toJson(holder.mView.getTag()));
-                    intent.putExtra(MovieDetailFragment.ARG_MOVIE, (Movie) holder.mView.getTag());
 
-                    //TODO: test below
+                    intent.putExtra(MovieDetailFragment.ARG_MOVIE, selectedMovie);
+                    intent.putExtra(MovieDetailFragment.ARG_MOVIE_LOADED_FROM_DB, selectedMovie.isFavorite());
+
                     startActivity(intent);
                     // }
                 }

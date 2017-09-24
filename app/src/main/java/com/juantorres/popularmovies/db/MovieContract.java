@@ -27,6 +27,7 @@ public class MovieContract {
                     Movie.COLUMN_NAME_ORIGINAL_TITLE    + " TEXT," +
                     Movie.COLUMN_NAME_OVERVIEW          + " TEXT," +
                     Movie.COLUMN_NAME_RELEASE_DATE      + " TEXT," +
+                    Movie.COLUMN_NAME_VOTE_AVERAGE      + " REAL," +
                     Movie.COLUMN_NAME_IS_FAVORITE + " BOOLEAN)";
 
     public static final String SQL_DELETE_ENTRIES =
@@ -38,11 +39,12 @@ public class MovieContract {
         public static final String COLUMN_NAME_MOVIEDB_ID       = "moviedbID";
         public static final String COLUMN_NAME_TITLE            = "title";
         public static final String COLUMN_NAME_POPULARITY       = "popularity";
-        public static final String COLUMN_NAME_PORTER_PATH      = "porterPath";
+        public static final String COLUMN_NAME_PORTER_PATH      = "posterPath";
         public static final String COLUMN_NAME_ORIGINAL_TITLE   = "originalTitle";
         public static final String COLUMN_NAME_OVERVIEW         = "overview";
         public static final String COLUMN_NAME_RELEASE_DATE     = "releaseDate";
         public static final String COLUMN_NAME_IS_FAVORITE      = "isFavorite";
+        public static final String COLUMN_NAME_VOTE_AVERAGE     = "voteAverage";
 
     }
 }

@@ -1,11 +1,14 @@
 package com.juantorres.popularmovies.tasks;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.juantorres.popularmovies.MovieListActivity;
+import com.juantorres.popularmovies.db.MovieContract;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 
 /**
@@ -15,6 +18,7 @@ import com.juantorres.popularmovies.utils.NetworkUtils;
 public class MoviesLoaderTask extends AsyncTask<String, Void, String> {
 
     private MovieListActivity activity;
+    private String LOAD_FROM_DB = "LOAD_FROM_DB";
 
 
     public MoviesLoaderTask(MovieListActivity main) {
@@ -31,18 +35,25 @@ public class MoviesLoaderTask extends AsyncTask<String, Void, String> {
     @Override
     protected String  doInBackground(String ... param ) {
         String jsonString = null;
+        String searchParam = param[0];
 
-        if(isDeviceOnline()){
-            switch (param[0]){
-                case MovieListActivity.POPULAR_MOVIES_PARAM:
-                    jsonString = NetworkUtils.getPopularMoviesJSONString();
-                    break;
+        if(searchParam.equals(MovieListActivity.FAVORITE_MOVIES_PARAM)){
+            jsonString = LOAD_FROM_DB;
 
-                case MovieListActivity.TOP_RATED_PARAM:
-                    jsonString = NetworkUtils.getTopRatedMoviesJSONString();
-                    break;
-            }
+        }else if(isDeviceOnline()){
+                switch (param[0]){
+                    case MovieListActivity.POPULAR_MOVIES_PARAM:
+                        jsonString = NetworkUtils.getPopularMoviesJSONString();
+                        break;
+
+                    case MovieListActivity.TOP_RATED_PARAM:
+                        jsonString = NetworkUtils.getTopRatedMoviesJSONString();
+                        break;
+                }
         }
+
+
+
 
         return jsonString;
     }
@@ -53,11 +64,17 @@ public class MoviesLoaderTask extends AsyncTask<String, Void, String> {
 
         if(jsonString == null){
             activity.showSplashScreen();
-        }else {
+        }else if(jsonString == LOAD_FROM_DB){
+            Cursor cursor = activity.getContentResolver().query(Uri.parse(MovieContract.CONTENT_URI), null, null, null, null);
+            activity.setupRecyclerView(cursor);
+            activity.showRecyclerView();
+        }else
+        {
             activity.setupRecyclerView(jsonString);
             activity.showRecyclerView();
 
         }
+
     }
 
     public boolean isDeviceOnline(){

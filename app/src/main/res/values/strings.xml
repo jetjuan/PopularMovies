@@ -15,6 +15,7 @@
     <string name="try_again_label">Try Again</string>
     <string name="action_top_rated">Top rated</string>
     <string name="action_most_popular">Most popular</string>
+    <string name="action_favorites">Favorites</string>
     <string name="trailers_label">Trailers</string>
     <string name="reviews_label">Reviews</string>
     <string name="read_more_label">Read More</string>

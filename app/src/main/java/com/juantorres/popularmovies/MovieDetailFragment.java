@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.nfc.FormatException;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,7 +29,11 @@ import com.juantorres.popularmovies.utils.JSONUtils;
 import com.juantorres.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,11 +51,13 @@ public class MovieDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_MOVIE = "movie";
+    public static final String ARG_MOVIE_LOADED_FROM_DB = "ARG_MOVIE_LOADED_FROM_DB";
 
     /**
      * The movie content this fragment is presenting.
      */
     private Movie mMovie;
+    private boolean loadedFromDB;
     private ArrayList<Trailer> mTrailers;
     private ArrayList<Review>  mReviews;
 
@@ -61,6 +68,8 @@ public class MovieDetailFragment extends Fragment {
     @BindView(R.id.trailers_list)          public LinearLayout mTrailersList;
     @BindView(R.id.reviews_list)           public LinearLayout mReviewList;
     @BindView(R.id.btn_favorite)           public ImageButton  mFavoriteButton;
+    @BindView(R.id.tv_reviews_label)       public TextView     mTrailersLabel;
+    @BindView(R.id.tv_trailers_label)      public TextView     mReviewsLabel;
 //    private ProgressBar progressBar;
 
 
@@ -84,9 +93,17 @@ public class MovieDetailFragment extends Fragment {
 //            mMovie = DummyContent.ITEM_MAP.get(getArguments().getInt(ARG_ITEM_ID));
 
             mMovie = getArguments().getParcelable(ARG_MOVIE);
-            mMovie.setFavorite(
-                    existsInDB(mMovie.getIdAsString())
-            );
+
+            if(getArguments().getBoolean(ARG_MOVIE_LOADED_FROM_DB)){
+                loadedFromDB = true;
+                mMovie.setFavorite(true);
+
+            }else {
+                mMovie.setFavorite(
+                        existsInDB(mMovie.getIdAsString())
+                );
+            }
+
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout =  activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
@@ -106,7 +123,11 @@ public class MovieDetailFragment extends Fragment {
         // Display movie data.
         displayMovieData();
         //Loading trailers and reviews...
-        loadDetails(mMovie.getIdAsString());
+        if(loadedFromDB){
+            hideDetails();
+        }else{
+            loadDetails(mMovie.getIdAsString());
+        }
         return rootView;
     }
 
@@ -129,6 +150,11 @@ public class MovieDetailFragment extends Fragment {
         }
 
         showFavoriteButtonPressed(mMovie.isFavorite());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -262,6 +288,11 @@ public class MovieDetailFragment extends Fragment {
 
     private Uri saveMovie(String ID){
         ContentResolver resolver = getContext().getContentResolver();
+        DateFormat formatter = new SimpleDateFormat("yyyy/mm/dd");
+        Date date = mMovie.getReleaseDate();
+        String dateString;
+
+        dateString = formatter.format(date);
 
         ContentValues cv = new ContentValues();
         cv.put(MovieContract.Movie.COLUMN_NAME_TITLE, mMovie.getTitle());
@@ -271,8 +302,17 @@ public class MovieDetailFragment extends Fragment {
         cv.put(MovieContract.Movie.COLUMN_NAME_OVERVIEW, mMovie.getOverview());
         cv.put(MovieContract.Movie.COLUMN_NAME_POPULARITY, mMovie.getPopularity());
         cv.put(MovieContract.Movie.COLUMN_NAME_PORTER_PATH, mMovie.getPosterPath());
-        cv.put(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE, mMovie.getReleaseYear());
+        cv.put(MovieContract.Movie.COLUMN_NAME_RELEASE_DATE, dateString);
+        cv.put(MovieContract.Movie.COLUMN_NAME_VOTE_AVERAGE, mMovie.getVoteAverage());
 
         return resolver.insert( Uri.parse(MovieContract.CONTENT_URI), cv);
+    }
+
+    private void hideDetails(){
+        mTrailersLabel.setVisibility(View.GONE);
+        mTrailersList.setVisibility(View.GONE);
+        mReviewsLabel.setVisibility(View.GONE);
+        mReviewList.setVisibility(View.GONE);
+
     }
 }

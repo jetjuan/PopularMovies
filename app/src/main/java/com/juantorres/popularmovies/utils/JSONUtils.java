@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by juantorres on 8/3/17.
@@ -49,7 +50,7 @@ public class JSONUtils {
                 String originalTitle = jsonMovie.getString("original_title");
                 String backdropPath = jsonMovie.getString("backdrop_path");
                 String releaseDateString = jsonMovie.getString("release_date");
-                Date releaseDate = new SimpleDateFormat("YYYY-MM-DD" ).parse(releaseDateString);
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH ).parse(releaseDateString);
                 String overview = jsonMovie.getString("overview");
 
                 newMovie.setId(movieID);
